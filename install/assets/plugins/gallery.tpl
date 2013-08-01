@@ -9,6 +9,7 @@
  * @internal	@guid 23636a8c613426979b9dea1ff0415abf
  * @internal    @events OnEmptyTrash
  * @internal    @installset base
+ * @internal	@modx_category Manager and Admin
  */
 
 if (!isset($params['modulePath'])) $params['modulePath'] = $modx->config['base_path'].'assets/modules/evogallery/';
