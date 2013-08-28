@@ -8,7 +8,7 @@ function mm_widget_evogallery($moduleid, $title='', $roles='', $templates='') {
         global $modx, $content, $mm_fields;
         $e = &$modx->Event;
         
-        if (useThisRule($roles, $templates)) {
+        if ($e->name == 'OnDocFormRender' && useThisRule($roles, $templates)) {
                 
                 //Include language file
                 $langpath = $modx->config['base_path'] . "assets/modules/evogallery/lang/";
