@@ -101,6 +101,7 @@ p.thumbPreview {
     text-align: center;
 }
 p.thumbPreview img {
+    width:200px; 
 }
 #overlay form {
     margin-left: 220px;
