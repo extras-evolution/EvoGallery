@@ -24,6 +24,7 @@ if ($modx->db->getRecordCount($rs) > 0){
 // load module configuration
 $parameters = array();
 if(!empty($properties)){
+	if(substr($properties,0,1)=='&') $properties = substr($properties,1);
 	$tmpParams = explode("&",$properties);
 	for($x=0; $x<count($tmpParams); $x++) {
 		$pTmp = explode("=", $tmpParams[$x]);
