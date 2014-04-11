@@ -32,6 +32,7 @@ class GalleryManagement
 		$this->config = $params;
 		$this->config['urlPath'] = $modx->config['base_url'].rtrim($this->config['savePath'],'/');
 		$this->config['savePath'] = $modx->config['base_path'].rtrim($this->config['savePath'],'/');
+		$this->config['modulePath'] = $modx->config['base_path'].'assets/modules/evogallery/';
 
 		$this->mainTemplate = 'template.html.tpl';
 		$this->headerTemplate = 'header.html.tpl';
@@ -42,7 +43,7 @@ class GalleryManagement
 
 		$this->galleriesTable = 'portfolio_galleries';
 
-		$this->current = (($_SERVER['HTTPS'] == 'on') ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $modx->config['base_url'] . MGR_DIR.'/index.php';
+		$this->current = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $modx->config['base_url'] . 'manager/index.php';
 		$this->a = $_GET['a'];
 		$this->id = $_GET['id'];
 		
