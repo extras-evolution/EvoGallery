@@ -32,6 +32,7 @@ class GalleryManagement
 		$this->config = $params;
 		$this->config['urlPath'] = $modx->config['base_url'].rtrim($this->config['savePath'],'/');
 		$this->config['savePath'] = $modx->config['base_path'].rtrim($this->config['savePath'],'/');
+		$this->config['modulePath'] = $modx->config['base_path'].'assets/modules/evogallery/';
 
 		$this->mainTemplate = 'template.html.tpl';
 		$this->headerTemplate = 'header.html.tpl';
