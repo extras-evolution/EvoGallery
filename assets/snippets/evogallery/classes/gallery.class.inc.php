@@ -224,38 +224,46 @@ class Gallery
 		// Retrieve photos from the database table
 		$result = $modx->db->query("select * from ". $modx->getFullTableName($this->galleriesTable). $where. ' order by '. $this->config['sortBy'] . ' ' . $this->config['sortDir']. $limit);
         $recordCount = $modx->db->getRecordCount($result);
-		if ($recordCount > 0)
-		{
-            $count = 1;		    
-			while ($row = $modx->fetchRow($result))
-			{
+		if ($recordCount > 0){
+			$count = 1;
+			$realcount = 1;
+			while ($row = $modx->fetchRow($result)){
 				$item_phx = new PHxParser();
-				foreach ($row as $name => $value)
-					if ($name=='filename')
-						$item_phx->setPHxVariable($name, rawurlencode(trim($value)));
-					else
-						$item_phx->setPHxVariable($name, trim($value));
-				$imgsize = getimagesize($this->config['galleriesPath'] . $row['content_id'] . '/' . $row['filename']); 
-				$item_phx->setPHxVariable('width',$imgsize[0]); 
-				$item_phx->setPHxVariable('height',$imgsize[1]);
-				$thumbsize = getimagesize($this->config['galleriesPath'] . $row['content_id'] . '/thumbs/' . $row['filename']); 
- 				$item_phx->setPHxVariable('thumb_width',$thumbsize[0]); 
- 				$item_phx->setPHxVariable('thumb_height',$thumbsize[1]);
-				$item_phx->setPHxVariable('image_withpath', $this->config['galleriesUrl'] . $row['content_id'] . '/' . $row['filename']);
-				$item_phx->setPHxVariable('images_dir', $this->config['galleriesUrl'] . $row['content_id'] . '/');
-				$item_phx->setPHxVariable('thumbs_dir', $this->config['galleriesUrl'] . $row['content_id'] . '/thumbs/');
-				$item_phx->setPHxVariable('original_dir', $this->config['galleriesUrl'] . $row['content_id'] . '/original/');
-				$item_phx->setPHxVariable('plugin_dir', $this->config['snippetUrl'] . $this->config['type'] . '/');
-				$item_phx->setPHxVariable('original_dir_all', $this->config['galleriesUrl'] . $row['content_id'] . '/original/' . $row['filename']);
-				$item_phx->setPHxVariable('original_filename', $this->config['galleriesUrl'] . $row['content_id'] . '/original/' . $row['filename']);
-				if(!empty($item_tpl_first) && $count == 1){
-    				$items .= $item_phx->Parse($item_tpl_first);
-				} else if(!empty($item_tpl_last) && $count == $recordCount){
-    				$items .= $item_phx->Parse($item_tpl_last);
-				} else if(!empty($item_tpl_alt) && $count % $this->config['itemAltNum'] == 0){
-    				$items .= $item_phx->Parse($item_tpl_alt);
-				} else {
-    				$items .= $item_phx->Parse($item_tpl);
+				$imgfile = $this->config['galleriesPath'] . $row['content_id'] . '/' . $row['filename'];
+				$thumbfile = $this->config['galleriesPath'] . $row['content_id'] . '/thumbs/' . $row['filename'];
+				if (file_exists($imgfile) && file_exists($thumbfile)) {
+					foreach ($row as $name => $value){
+						if ($name=='filename'){
+							$item_phx->setPHxVariable($name, rawurlencode(trim($value)));
+						}else{
+							$item_phx->setPHxVariable($name, trim($value));
+						}
+					}
+					$imgsize = getimagesize($imgfile); 
+					$item_phx->setPHxVariable('width',$imgsize[0]); 
+					$item_phx->setPHxVariable('height',$imgsize[1]);
+					$thumbsize = getimagesize($thumbfile); 
+					$item_phx->setPHxVariable('thumb_width',$thumbsize[0]); 
+					$item_phx->setPHxVariable('thumb_height',$thumbsize[1]);
+					$item_phx->setPHxVariable('thumb_width',$thumbsize[0]); 
+					$item_phx->setPHxVariable('thumb_height',$thumbsize[1]);
+					$item_phx->setPHxVariable('image_withpath', $this->config['galleriesUrl'] . $row['content_id'] . '/' . $row['filename']);
+					$item_phx->setPHxVariable('images_dir', $this->config['galleriesUrl'] . $row['content_id'] . '/');
+					$item_phx->setPHxVariable('thumbs_dir', $this->config['galleriesUrl'] . $row['content_id'] . '/thumbs/');
+					$item_phx->setPHxVariable('original_dir', $this->config['galleriesUrl'] . $row['content_id'] . '/original/');
+					$item_phx->setPHxVariable('plugin_dir', $this->config['snippetUrl'] . $this->config['type'] . '/');
+					$item_phx->setPHxVariable('original_dir_all', $this->config['galleriesUrl'] . $row['content_id'] . '/original/' . $row['filename']);
+					$item_phx->setPHxVariable('original_filename', $this->config['galleriesUrl'] . $row['content_id'] . '/original/' . $row['filename']);
+					if(!empty($item_tpl_first) && $realcount == 1){
+						$items .= $item_phx->Parse($item_tpl_first);
+					}elseif(!empty($item_tpl_last) && $count == $recordCount){
+						$items .= $item_phx->Parse($item_tpl_last);
+					}elseif(!empty($item_tpl_alt) && $count % $this->config['itemAltNum'] == 0){
+						$items .= $item_phx->Parse($item_tpl_alt);
+					}else {
+						$items .= $item_phx->Parse($item_tpl);
+					}
+					$realcount++;
 				}
 				$count++;
 			}
