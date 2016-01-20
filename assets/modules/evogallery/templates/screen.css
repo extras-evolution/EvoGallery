@@ -2,7 +2,7 @@
 * Management module stylesheet
 *--------------------------------------*/
 body, html { height: 100%; }
-body { margin: 0; padding: 0; color: #555; background-color: #f7f7f7; font-size: 12px; font-family: Arial,sans-serif; } 
+body { margin: 0; padding: 0; color: #555; background-color: #fff; font-size: 12px; font-family: Arial,sans-serif; } 
 
 form { margin: 0; padding: 0; }
 fieldset { margin: 0; padding: 0; border: none; }
@@ -25,7 +25,7 @@ input, select, textarea { color: #444; background-color: #f6f6f6; border: 1px so
 #topnav a { color: #555; } 
 #view { float: right;
 }
-#content { padding: 10px 13px 15px;  }
+#content { padding: 1px 0 0;  }
 
 #breadcrumbs { line-height: 1.5em; }
 
@@ -73,11 +73,17 @@ p.first { margin: 0; padding: 0; }
 
 #progressBar { width: 200px; display: block; margin: 3px 0; font-size: 0.7em; height: 4px; background: #ccc url(../images/progressbar.png) no-repeat -200px 0; }
 
-#uploadList { margin: 7px 0 0 0; padding: 0; list-style: none; position: inherit; }
-#uploadList li { float: left; display: table-cell; position: relative; z-index: 100; width: 145px; height: 145px; background-color: #000; margin: 5px 7px 2px 0; padding: 0; overflow: hidden; text-align: center; vertical-align: middle; line-height: 139px; cursor: pointer;}
+#uploadList { margin: 10px 0 0 0; padding: 0; list-style: none; position: inherit; padding: 10px 15px; background-color: #ebebeb; border: 1px dashed #ccc; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15) inset;}
+#uploadList li { float: left; display: table-cell; position: relative; z-index: 100; width: 100px; background-color: #fff; margin: 5px 7px 2px 0; padding: 5px; overflow: hidden; text-align: center; vertical-align: middle; cursor: pointer;}
 #uploadList li img.thb { position: relative; z-index: 120; vertical-align: middle;
-    height: 145px;
+    width: 100%;
 }
+
+
+#uploadList {*zoom: 1;}
+#uploadList:before,
+#uploadList:after {display: table; line-height: 0; content: "";}
+#uploadList:after {clear: both;}
 
 .clearFiles { clear: left; padding: 6px 0 0 0; height: 1px; overflow: hidden; }
 
@@ -85,13 +91,28 @@ p.first { margin: 0; padding: 0; }
 
 a.cancelButton { float: right; display: block; z-index: 150; height: 16px; width: 16px; background: transparent url(../images/cancel.png) no-repeat; text-indent: -9999px; }
 
-.thbButtons { position: absolute; top: 0; right: 0; z-index: 150; }
+.thbButtons { position: absolute; top: 5px; right: 5px; z-index: 150; }
 .thbButtons a:focus { -moz-outline: none; }
 .thbButtons a.edit { float: left; display: block; height: 17px; width: 16px; margin: 2px 6px 0 0; background: transparent url(../images/edit.png) no-repeat; text-indent: -9999px; }
 .thbButtons a.delete { float: left; display: block; height: 17px; width: 16px; margin: 2px 3px 0 0; background: transparent url(../images/cancel.png) no-repeat; text-indent: -9999px; }
 
 #beginsort { display: inline; }
-#cmdsort { display: inline; }
+#cmdsort { 
+  display: inline; 
+  padding: 5px 15px;
+  cursor: pointer;
+  border-color: #444;
+  background-color: #444;
+  color: #fff;
+}
+#cmdsort:hover { 
+  border-color: #555;
+  background-color: #555;
+}
+#cmdsort:active { 
+  border-color: #333;
+  background-color: #333;
+}
 
 p.thumbPreview {
     width: 220px;
@@ -119,7 +140,7 @@ p.thumbPreview img {
 .awesome, .awesome:visited {
     background: #222 url(../images/alert-overlay.png) repeat-x !important;
     display: inline-block;
-    padding: 5px 10px 6px;
+    padding: 10px 15px;
     color: #fff !important;
     text-decoration: none !important;
     font-weight: bold;
@@ -179,9 +200,9 @@ div.popup .progress {
 	padding: 15px 0;
 }
 
-#sortcontrols {}
-#selectallcontrols {clear: left; margin-top: 5px;}
-.thbSelect { position: absolute; top: 0; left: 0; z-index: 150; }
+#sortcontrols {display: block !important;}
+#selectallcontrols {clear: left; margin-top: 10px;}
+.thbSelect { position: absolute; top: 3px; left: 5px; z-index: 150; }
 .thbSelect a { float: left; display: block; height: 21px; width: 20px; margin: 2px 6px 0 0; background: transparent url(../images/checkoff.png) no-repeat; text-indent: -9999px; }
 .selected .thbSelect a { background: transparent url(../images/checkon.png) no-repeat; }
 
@@ -189,3 +210,25 @@ div.popup .progress {
 #actions-popup {z-index: 999; padding: 5px; background: #FDFDFD; border: 1px solid #E3E3E3; width: 300px; position: absolute; display: none;}
 #actions-popup ul {margin: 10px 5px; padding: 0; list-style: none;}
 #actions-popup ul li {margin: 5px 0;}
+
+.uploadifyQueue {
+  margin-bottom: 10px;
+}
+
+a#uploadFiles,
+a#clearQueue,
+a#selectall,
+a#unselectall {
+  display: inline-block;
+  padding: 6px 8px;
+  border: 1px solid #dadada;
+  background-color: #fff;
+  text-decoration: none;
+  margin-right: 5px;
+}
+a#uploadFiles:hover,
+a#clearQueue:hover,
+a#selectall:hover,
+a#unselectall:hover {
+  border-color: #81A740;
+}
