@@ -7,6 +7,15 @@ if(!defined('MODX_BASE_PATH')){die('What are you doing? Get out of here!');}
 //
 // System settings
 //
+$savePath = "assets/galleries";
+if (!isset($galleriesUrl) or !isset($galleriesPath)) {
+	$rs = $modx->db->select('*', $modx->getFullTableName("site_modules"), "disabled=0 and ".(isset($moduleid)?"id=".$moduleid:"name='EvoGallery' "));
+	$moduleContent = $modx->db->getRow($rs);
+	if (!empty($moduleContent["properties"])) {
+		$moduleParameters = $modx->parseProperties($moduleContent["properties"], $moduleContent["guid"], 'module');
+		$savePath = $moduleParameters["savePath"];
+	}
+}
 
 $params['display'] = isset($display) ? $display : 'images';
 	// Have the snippet output either a list of galleries within the specified doc Id, a list of images within a gallery, or a single image based on a pic Id
@@ -76,10 +85,10 @@ $params['itemTplAlt'] = isset($itemTplAlt) ? $itemTplAlt : '';
 $params['itemAltNum'] = isset($itemAltNum) ? $itemAltNum : '2';
 	// Modifier for the alternate thumbnail/image (defaults to every second item)
 
-$params['galleriesUrl'] = isset($galleriesUrl) ? $galleriesUrl : $modx->config['base_url'] . 'assets/galleries/';
+$params['galleriesUrl'] = isset($galleriesUrl) ? $galleriesUrl : $modx->config['base_url'] . $savePath.'/';
 	// URL to the galleries directory (should contain folders with the Id of the document, with a thumbs/ folder within each document's gallery)
 
-$params['galleriesPath'] = isset($galleriesPath) ? $galleriesPath : $modx->config['base_path'] . 'assets/galleries/';
+$params['galleriesPath'] = isset($galleriesPath) ? $galleriesPath : $modx->config['base_path'] . $savePath.'/';
 	// Path to the galleries directory
 
 $params['snippetUrl'] = isset($snippetUrl) ? $snippetUrl : $modx->config['base_url'] . 'assets/snippets/evogallery/';
