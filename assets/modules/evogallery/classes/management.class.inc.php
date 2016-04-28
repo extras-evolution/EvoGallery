@@ -44,8 +44,8 @@ class GalleryManagement
 		$this->galleriesTable = 'portfolio_galleries';
 
 		$this->current = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $modx->config['base_url'] . MGR_DIR . '/index.php';
-		$this->a = $_GET['a'];
-		$this->id = $_GET['id'];
+		$this->a = isset($_GET['a']) ? $_GET['a'] : 0;
+		$this->id = isset($_GET['id']) ? $_GET['id'] : 0;
 		
 		$this->loadLanguage();
 	}
@@ -142,7 +142,7 @@ class GalleryManagement
 			'action' => $this_page . '&action=view&content_id=' . $contentId . (isset($_GET['onlygallery'])?'&onlygallery=1':''),
 			'id' => $info['id'],
 			'filename' => urlencode($info['filename']),
-			'image' => $this->config['urlPath'] .'/' .$contentId . '/thumbs/' . rawurlencode($info['filename']),
+			'image' => $this->config['urlPath'] .'/' .$contentId . '/thumbs/' . rawurlencode($info['filename']) . '?v='.filemtime($this->config['savePath'] .'/' .$contentId . '/thumbs/' . $info['filename']),
 			'title' => $info['title'],
 			'description' => $info['description'],
 			'keywords' => $info['keywords'],
@@ -369,7 +369,7 @@ class GalleryManagement
 			$result = $modx->db->select('id, filename, title, description, keywords', $modx->getFullTableName($this->galleriesTable), 'content_id=' . $content_id, 'sortorder ASC');
 			while ($row = $modx->fetchRow($result))
 			{
-				$thumbs .= "<li><div class=\"thbSelect\"><a class=\"select\" href=\"#\">".$this->lang['select']."</a></div><div class=\"thbButtons\"><a href=\"" . $this_page . "&action=edit&content_id=$content_id&edit=" . $row['id'] . (isset($_GET['onlygallery'])?"&onlygallery=1":"") ."\" class=\"edit\">".$this->lang['edit']."</a><a href=\"$this_page&action=view&content_id=$content_id&delete=" . $row['id'] . "\" class=\"delete\">".$this->lang['delete']."</a></div><img src=\"" . $this->config['urlPath'] . '/' . $content_id . '/thumbs/' . rawurlencode($row['filename']) . "\" alt=\"" . htmlentities(stripslashes($row['filename'])) . "\" class=\"thb\" /><input type=\"hidden\" name=\"sort[]\" value=\"" . $row['id'] . "\" /></li>\n";
+				$thumbs .= "<li><div class=\"thbSelect\"><a class=\"select\" href=\"#\">".$this->lang['select']."</a></div><div class=\"thbButtons\"><a href=\"" . $this_page . "&action=edit&content_id=$content_id&edit=" . $row['id'] . (isset($_GET['onlygallery'])?"&onlygallery=1":"") ."\" class=\"edit\">".$this->lang['edit']."</a><a href=\"$this_page&action=view&content_id=$content_id&delete=" . $row['id'] . "\" class=\"delete\">".$this->lang['delete']."</a></div><img src=\"" . $this->config['urlPath'] . '/' . $content_id . '/thumbs/' . rawurlencode($row['filename']) . '?v='.filemtime($this->config['savePath'] .'/' .$content_id . '/thumbs/' . $row['filename']) ."\" alt=\"" . htmlentities(stripslashes($row['filename'])) . "\" class=\"thb\" /><input type=\"hidden\" name=\"sort[]\" value=\"" . $row['id'] . "\" /></li>\n";
 			}
 
 			$tplparams['gallery_header'] = $galleryheader;
@@ -689,7 +689,7 @@ class GalleryManagement
 			}
 			
 			//return new filename
-			return json_encode(array('result'=>'ok','filename'=>$target_fname,'id'=>$id));
+			return json_encode(array('result'=>'ok','filename'=>$target_fname,'cacheBuster'=>'?v='.filemtime($target_dir.$target_fname),'id'=>$id));
 		}
 		
 	}

@@ -18,7 +18,7 @@ $(document).ready(function(){
             var info = eval('(' + response + ')');
             if (info['result']=='ok') {
 				var onlygallery = $.urlParam('onlygallery', location.href)=='1'?"&onlygallery=1":"";
-				$('#uploadList').append("<li><div class=\"thbSelect\"><a class=\"select\" href=\"#\">[+lang.select+]</a></div><div class=\"thbButtons\"><a href=\"" + unescape('[+self+]') + "&action=edit&content_id=[+content_id+]&edit=" + info['id'] + onlygallery + "\" class=\"edit\">[+lang.edit+]</a><a href=\"" + unescape('[+self+]') + "&delete=" + info['id'] + "\" class=\"delete\">[+lang.delete+]</a></div><img src=\"" + unescape('[+thumbs+]') + encodeURI(info['filename']) + "\" alt=\"" + info['filename'] + "\" class=\"thb\" /><input type=\"hidden\" name=\"sort[]\" value=\"" + info['id'] + "\" /></li>");
+				$('#uploadList').append("<li><div class=\"thbSelect\"><a class=\"select\" href=\"#\">[+lang.select+]</a></div><div class=\"thbButtons\"><a href=\"" + unescape('[+self+]') + "&action=edit&content_id=[+content_id+]&edit=" + info['id'] + onlygallery + "\" class=\"edit\">[+lang.edit+]</a><a href=\"" + unescape('[+self+]') + "&delete=" + info['id'] + "\" class=\"delete\">[+lang.delete+]</a></div><img src=\"" + unescape('[+thumbs+]') + encodeURI(info['filename']) + info['cacheBuster'] + "\" alt=\"" + info['filename'] + "\" class=\"thb\" /><input type=\"hidden\" name=\"sort[]\" value=\"" + info['id'] + "\" /></li>");
 			}	
 			else
 				alert('[+lang.upload_failed+]: ' + info['msg']);
