@@ -105,7 +105,7 @@ class GalleryManagement
 
 		$this_page = $this->current . '?a=' . $this->a . '&amp;id=' . $this->id;
 
-		$contentId = isset($_GET['content_id']) ? intval($_GET['content_id']) : $this->config['docId'];
+		$contentId = intval(isset($_GET['content_id']) ? $_GET['content_id'] : $this->config['docId']);
 		$url = $modx->config['base_url'].$this->config['savePath'];
 		$id = isset($_GET['edit']) ? intval($_GET['edit']) : '';
 
@@ -165,7 +165,7 @@ class GalleryManagement
 
 		$tplparams = array();
 
-		$parentId = isset($_GET['content_id']) ? intval($_GET['content_id']) : $this->config['docId'];
+		$parentId = intval(isset($_GET['content_id']) ? $_GET['content_id'] : $this->config['docId']);
 
 		// Get search filter values
 		$filter = '';
@@ -285,7 +285,7 @@ class GalleryManagement
 
 		$this_page = $this->current . '?a=' . $this->a . '&id=' . $this->id;
 
-		$content_id = isset($_GET['content_id']) ? intval($_GET['content_id']) : $this->config['docId'];  // Get document id
+		$content_id = intval(isset($_GET['content_id']) ? $_GET['content_id'] : $this->config['docId']);  // Get document id
 
 		// Verify session and retrieve document information
 		$result = $modx->db->select('pagetitle, longtitle, parent', $modx->getFullTableName('site_content'), "id = '" . $content_id . "'");
@@ -391,7 +391,7 @@ class GalleryManagement
 
 		$this_page = $this->current . '?a=' . $this->a . '&id=' . $this->id;
 
-		$parentId = isset($_GET['content_id']) ? intval($_GET['content_id']) : $this->config['docId'];
+		$parentId = intval(isset($_GET['content_id']) ? $_GET['content_id'] : $this->config['docId']);
 
 		if (isset($_GET['query']))
 			$search = '<label for="query">'.$this->lang['search'].':</label> <input type="text" name="query" id="query" value="' . $_GET['query'] . '" />';
@@ -609,7 +609,7 @@ class GalleryManagement
 		global $modx;
 		
 		if (is_uploaded_file($_FILES['Filedata']['tmp_name'])){
-			$content_id = isset($_POST['content_id']) ? intval($_POST['content_id']) : $params['docId'];  // Get document id3_get_frame_long_name(string frameId)
+			$content_id = intval(isset($_POST['content_id']) ? $_POST['content_id'] : $params['docId']);  // Get document id3_get_frame_long_name(string frameId)
 			$target_dir = $this->config['savePath'] . '/' . $content_id . '/';
 			$target_fname = $_FILES['Filedata']['name'];
 			$keepOriginal = $this->config['keepOriginal']=='Yes';
