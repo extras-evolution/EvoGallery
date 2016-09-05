@@ -110,7 +110,7 @@ class GalleryManagement
 		$id = isset($_GET['edit']) ? intval($_GET['edit']) : '';
 
 		$result = $modx->db->select('id, filename, title, description, keywords', $modx->getFullTableName($this->galleriesTable), "id = '" . $id . "'");
-		$info = $modx->fetchRow($result);
+		$info = $modx->db->getRow($result);
 
         /* Get keyword tags */
 		$sql = "SELECT `keywords` FROM ".$modx->getFullTableName($this->galleriesTable);
@@ -291,7 +291,7 @@ class GalleryManagement
 		$result = $modx->db->select('pagetitle, longtitle, parent', $modx->getFullTableName('site_content'), "id = '" . $content_id . "'");
 		if ($modx->db->getRecordCount($result) > 0)
 		{
-			$info = $modx->fetchRow($result);
+			$info = $modx->db->getRow($result);
 
 			if (!isset($_GET['onlygallery']))
 			{
@@ -367,7 +367,7 @@ class GalleryManagement
 			// Read through project files directory and show thumbs
 			$thumbs = '';
 			$result = $modx->db->select('id, filename, title, description, keywords', $modx->getFullTableName($this->galleriesTable), 'content_id=' . $content_id, 'sortorder ASC');
-			while ($row = $modx->fetchRow($result))
+			while ($row = $modx->db->getRow($result))
 			{
 				$thumbs .= "<li><div class=\"thbSelect\"><a class=\"select\" href=\"#\">".$this->lang['select']."</a></div><div class=\"thbButtons\"><a href=\"" . $this_page . "&action=edit&content_id=$content_id&edit=" . $row['id'] . (isset($_GET['onlygallery'])?"&onlygallery=1":"") ."\" class=\"edit\">".$this->lang['edit']."</a><a href=\"$this_page&action=view&content_id=$content_id&delete=" . $row['id'] . "\" class=\"delete\">".$this->lang['delete']."</a></div><img src=\"" . $this->config['urlPath'] . '/' . $content_id . '/thumbs/' . rawurlencode($row['filename']) . '?v='.filemtime($this->config['savePath'] .'/' .$content_id . '/thumbs/' . $row['filename']) ."\" alt=\"" . htmlentities(stripslashes($row['filename'])) . "\" class=\"thb\" /><input type=\"hidden\" name=\"sort[]\" value=\"" . $row['id'] . "\" /></li>\n";
 			}
@@ -400,11 +400,11 @@ class GalleryManagement
 
 		// Generate breadcrumbs
 		$result = $modx->db->select('id, pagetitle, parent', $modx->getFullTableName('site_content'), 'id=' . $parentId);
-		$row = $modx->fetchRow($result);
+		$row = $modx->db->getRow($result);
 		$breadcrumbs = '<a href="' . $this_page . '&action=view&content_id=' . $row['id'] . '" title="'.$this->lang['click_view_categories'].'">' . stripslashes($row['pagetitle']) . '</a>';
 		while ($row['id'] > $this->config['docId'])
 		{
-			$row = $modx->fetchRow($modx->db->select('id, pagetitle, parent', $modx->getFullTableName('site_content'), 'id=' . $row['parent']));
+			$row = $modx->db->getRow($modx->db->select('id, pagetitle, parent', $modx->getFullTableName('site_content'), 'id=' . $row['parent']));
 			$breadcrumbs = '<a href="' . $this_page . '&action=view&content_id=' . $row['id'] . '" title="'.$this->lang['click_view_categories'].'">' . stripslashes($row['pagetitle']) . '</a> &raquo; ' . $breadcrumbs;
 		}
 
