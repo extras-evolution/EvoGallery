@@ -22,17 +22,7 @@ if ($modx->db->getRecordCount($rs) > 0){
 }
 
 // load module configuration
-$parameters = array();
-if(!empty($properties)){
-	if(substr($properties,0,1)=='&') $properties = substr($properties,1);
-	$tmpParams = explode("&",$properties);
-	for($x=0; $x<count($tmpParams); $x++) {
-		$pTmp = explode("=", $tmpParams[$x]);
-		$pvTmp = explode(";", trim($pTmp[1]));
-		if ($pvTmp[1]=='list' && $pvTmp[3]!="") $parameters[$pTmp[0]] = $pvTmp[3]; //list default
-		else if($pvTmp[1]!='list' && $pvTmp[2]!="") $parameters[$pTmp[0]] = $pvTmp[2];
-	}
-}
+$parameters = !empty($properties) ? $modx->parseProperties($properties) : array();
 
 include_once('classes/management.class.inc.php');
 

@@ -43,9 +43,9 @@ class GalleryManagement
 
 		$this->galleriesTable = 'portfolio_galleries';
 
-		$this->current = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $modx->config['base_url'] . 'manager/index.php';
-		$this->a = $_GET['a'];
-		$this->id = $_GET['id'];
+		$this->current = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $modx->config['base_url'] . MGR_DIR . '/index.php';
+		$this->a = isset($_GET['a']) ? $_GET['a'] : 0;
+		$this->id = isset($_GET['id']) ? $_GET['id'] : 0;
 		
 		$this->loadLanguage();
 	}
@@ -105,12 +105,12 @@ class GalleryManagement
 
 		$this_page = $this->current . '?a=' . $this->a . '&amp;id=' . $this->id;
 
-		$contentId = isset($_GET['content_id']) ? intval($_GET['content_id']) : $this->config['docId'];
+		$contentId = intval(isset($_GET['content_id']) ? $_GET['content_id'] : $this->config['docId']);
 		$url = $modx->config['base_url'].$this->config['savePath'];
 		$id = isset($_GET['edit']) ? intval($_GET['edit']) : '';
 
 		$result = $modx->db->select('id, filename, title, description, keywords', $modx->getFullTableName($this->galleriesTable), "id = '" . $id . "'");
-		$info = $modx->fetchRow($result);
+		$info = $modx->db->getRow($result);
 
         /* Get keyword tags */
 		$sql = "SELECT `keywords` FROM ".$modx->getFullTableName($this->galleriesTable);
@@ -142,7 +142,7 @@ class GalleryManagement
 			'action' => $this_page . '&action=view&content_id=' . $contentId . (isset($_GET['onlygallery'])?'&onlygallery=1':''),
 			'id' => $info['id'],
 			'filename' => urlencode($info['filename']),
-			'image' => $this->config['urlPath'] .'/' .$contentId . '/thumbs/' . rawurlencode($info['filename']),
+			'image' => $this->config['urlPath'] .'/' .$contentId . '/thumbs/' . rawurlencode($info['filename']) . '?v='.filemtime($this->config['savePath'] .'/' .$contentId . '/thumbs/' . $info['filename']),
 			'title' => $info['title'],
 			'description' => $info['description'],
 			'keywords' => $info['keywords'],
@@ -165,7 +165,7 @@ class GalleryManagement
 
 		$tplparams = array();
 
-		$parentId = isset($_GET['content_id']) ? intval($_GET['content_id']) : $this->config['docId'];
+		$parentId = intval(isset($_GET['content_id']) ? $_GET['content_id'] : $this->config['docId']);
 
 		// Get search filter values
 		$filter = '';
@@ -285,13 +285,13 @@ class GalleryManagement
 
 		$this_page = $this->current . '?a=' . $this->a . '&id=' . $this->id;
 
-		$content_id = isset($_GET['content_id']) ? intval($_GET['content_id']) : $this->config['docId'];  // Get document id
+		$content_id = intval(isset($_GET['content_id']) ? $_GET['content_id'] : $this->config['docId']);  // Get document id
 
 		// Verify session and retrieve document information
 		$result = $modx->db->select('pagetitle, longtitle, parent', $modx->getFullTableName('site_content'), "id = '" . $content_id . "'");
 		if ($modx->db->getRecordCount($result) > 0)
 		{
-			$info = $modx->fetchRow($result);
+			$info = $modx->db->getRow($result);
 
 			if (!isset($_GET['onlygallery']))
 			{
@@ -367,9 +367,9 @@ class GalleryManagement
 			// Read through project files directory and show thumbs
 			$thumbs = '';
 			$result = $modx->db->select('id, filename, title, description, keywords', $modx->getFullTableName($this->galleriesTable), 'content_id=' . $content_id, 'sortorder ASC');
-			while ($row = $modx->fetchRow($result))
+			while ($row = $modx->db->getRow($result))
 			{
-				$thumbs .= "<li><div class=\"thbSelect\"><a class=\"select\" href=\"#\">".$this->lang['select']."</a></div><div class=\"thbButtons\"><a href=\"" . $this_page . "&action=edit&content_id=$content_id&edit=" . $row['id'] . (isset($_GET['onlygallery'])?"&onlygallery=1":"") ."\" class=\"edit\">".$this->lang['edit']."</a><a href=\"$this_page&action=view&content_id=$content_id&delete=" . $row['id'] . "\" class=\"delete\">".$this->lang['delete']."</a></div><img src=\"" . $this->config['urlPath'] . '/' . $content_id . '/thumbs/' . rawurlencode($row['filename']) . "\" alt=\"" . htmlentities(stripslashes($row['filename'])) . "\" class=\"thb\" /><input type=\"hidden\" name=\"sort[]\" value=\"" . $row['id'] . "\" /></li>\n";
+				$thumbs .= "<li><div class=\"thbSelect\"><a class=\"select\" href=\"#\">".$this->lang['select']."</a></div><div class=\"thbButtons\"><a href=\"" . $this_page . "&action=edit&content_id=$content_id&edit=" . $row['id'] . (isset($_GET['onlygallery'])?"&onlygallery=1":"") ."\" class=\"edit\">".$this->lang['edit']."</a><a href=\"$this_page&action=view&content_id=$content_id&delete=" . $row['id'] . "\" class=\"delete\">".$this->lang['delete']."</a></div><img src=\"" . $this->config['urlPath'] . '/' . $content_id . '/thumbs/' . rawurlencode($row['filename']) . '?v='.filemtime($this->config['savePath'] .'/' .$content_id . '/thumbs/' . $row['filename']) ."\" alt=\"" . htmlentities(stripslashes($row['filename'])) . "\" class=\"thb\" /><input type=\"hidden\" name=\"sort[]\" value=\"" . $row['id'] . "\" /></li>\n";
 			}
 
 			$tplparams['gallery_header'] = $galleryheader;
@@ -391,7 +391,7 @@ class GalleryManagement
 
 		$this_page = $this->current . '?a=' . $this->a . '&id=' . $this->id;
 
-		$parentId = isset($_GET['content_id']) ? intval($_GET['content_id']) : $this->config['docId'];
+		$parentId = intval(isset($_GET['content_id']) ? $_GET['content_id'] : $this->config['docId']);
 
 		if (isset($_GET['query']))
 			$search = '<label for="query">'.$this->lang['search'].':</label> <input type="text" name="query" id="query" value="' . $_GET['query'] . '" />';
@@ -400,11 +400,11 @@ class GalleryManagement
 
 		// Generate breadcrumbs
 		$result = $modx->db->select('id, pagetitle, parent', $modx->getFullTableName('site_content'), 'id=' . $parentId);
-		$row = $modx->fetchRow($result);
+		$row = $modx->db->getRow($result);
 		$breadcrumbs = '<a href="' . $this_page . '&action=view&content_id=' . $row['id'] . '" title="'.$this->lang['click_view_categories'].'">' . stripslashes($row['pagetitle']) . '</a>';
 		while ($row['id'] > $this->config['docId'])
 		{
-			$row = $modx->fetchRow($modx->db->select('id, pagetitle, parent', $modx->getFullTableName('site_content'), 'id=' . $row['parent']));
+			$row = $modx->db->getRow($modx->db->select('id, pagetitle, parent', $modx->getFullTableName('site_content'), 'id=' . $row['parent']));
 			$breadcrumbs = '<a href="' . $this_page . '&action=view&content_id=' . $row['id'] . '" title="'.$this->lang['click_view_categories'].'">' . stripslashes($row['pagetitle']) . '</a> &raquo; ' . $breadcrumbs;
 		}
 
@@ -609,7 +609,7 @@ class GalleryManagement
 		global $modx;
 		
 		if (is_uploaded_file($_FILES['Filedata']['tmp_name'])){
-			$content_id = isset($_POST['content_id']) ? intval($_POST['content_id']) : $params['docId'];  // Get document id3_get_frame_long_name(string frameId)
+			$content_id = intval(isset($_POST['content_id']) ? $_POST['content_id'] : $params['docId']);  // Get document id3_get_frame_long_name(string frameId)
 			$target_dir = $this->config['savePath'] . '/' . $content_id . '/';
 			$target_fname = $_FILES['Filedata']['name'];
 			$keepOriginal = $this->config['keepOriginal']=='Yes';
@@ -689,7 +689,7 @@ class GalleryManagement
 			}
 			
 			//return new filename
-			return json_encode(array('result'=>'ok','filename'=>$target_fname,'id'=>$id));
+			return json_encode(array('result'=>'ok','filename'=>$target_fname,'cacheBuster'=>'?v='.filemtime($target_dir.$target_fname),'id'=>$id));
 		}
 		
 	}

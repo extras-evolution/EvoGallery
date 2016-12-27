@@ -290,7 +290,7 @@ class PHxParser {
 							$sql = "SELECT snippet FROM " . $modx->getFullTableName("site_snippets") . " WHERE " . $modx->getFullTableName("site_snippets") . ".name='phx:" . $modifier_cmd[$i] . "';";
 			             	$result = $modx->dbQuery($sql);
 			             	if ($modx->recordCount($result) == 1) {
-								$row = $modx->fetchRow($result);
+								$row = $modx->db->getRow($result);
 						 		$cm = $this->cache["cm"][$modifier_cmd[$i]] = $row["snippet"];
 						 		$this->Log("  |--- DB -> Custom Modifier");
 						 	}

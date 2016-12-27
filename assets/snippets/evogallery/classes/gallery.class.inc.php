@@ -104,7 +104,7 @@ class Gallery
 		if ($recordCount > 0)
 		{
 		    $count = 1;
-			while ($row = $modx->fetchRow($result))
+			while ($row = $modx->db->getRow($result))
 			{
 				$item_phx = new PHxParser();
 
@@ -116,7 +116,7 @@ class Gallery
 				$image_result = $modx->db->select("filename", $modx->getFullTableName($this->galleriesTable), "content_id = '" . $row['id'] . "'", $this->config['sortBy'] . ' ' . $this->config['sortDir'], '1');
 				if ($modx->db->getRecordCount($image_result) > 0)
 				{
-					$image = $modx->fetchRow($image_result);
+					$image = $modx->db->getRow($image_result);
 					foreach ($image as $name => $value)
 						if ($name=='filename')
 							$item_phx->setPHxVariable($name, rawurlencode(trim($value)));
@@ -227,7 +227,7 @@ class Gallery
 		if ($recordCount > 0){
 			$count = 1;
 			$realcount = 1;
-			while ($row = $modx->fetchRow($result)){
+			while ($row = $modx->db->getRow($result)){
 				$item_phx = new PHxParser();
 				$imgfile = $this->config['galleriesPath'] . $row['content_id'] . '/' . $row['filename'];
 				$thumbfile = $this->config['galleriesPath'] . $row['content_id'] . '/thumbs/' . $row['filename'];
@@ -299,7 +299,7 @@ class Gallery
 	    $result = $modx->db->select("*", $modx->getFullTableName($this->galleriesTable), $picSelect);
 		if ($modx->db->getRecordCount($result) > 0)
 		{
-			while ($row = $modx->fetchRow($result))
+			while ($row = $modx->db->getRow($result))
 			{
 				$item_phx = new PHxParser();
 				foreach ($row as $name => $value)
