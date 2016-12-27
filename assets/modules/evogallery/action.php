@@ -9,7 +9,7 @@ if (isset($_REQUEST[$site_sessionname]))
 	session_id($_REQUEST[$site_sessionname]); //without this always generate new session
 
 startCMSSession();
-
+require_once "../../../".MGR_DIR."/includes/protect.inc.php";
 include_once "../../../".MGR_DIR."/includes/document.parser.class.inc.php";
 $modx = new DocumentParser;
 $modx->loadExtension("ManagerAPI");

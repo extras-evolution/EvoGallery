@@ -29,7 +29,7 @@ $path_to_modx_config = '../../../'.MGR_DIR.'/includes/config.inc.php';
 
 include_once($path_to_modx_config);
 startCMSSession();
-
+require_once "../../../".MGR_DIR."/includes/protect.inc.php";
 include_once "../../../".MGR_DIR."/includes/document.parser.class.inc.php";
 $modx = new DocumentParser;
 $modx->loadExtension("ManagerAPI");
