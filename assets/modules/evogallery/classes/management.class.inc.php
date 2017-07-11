@@ -43,7 +43,7 @@ class GalleryManagement
 
 		$this->galleriesTable = 'portfolio_galleries';
 
-		$this->current = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $modx->config['base_url'] . MGR_DIR . '/index.php';
+		$this->current = $modx->config['server_protocol'].'://' . $_SERVER['HTTP_HOST'] . $modx->config['base_url'] . MGR_DIR . '/index.php';
 		$this->a = isset($_GET['a']) ? $_GET['a'] : 0;
 		$this->id = isset($_GET['id']) ? $_GET['id'] : 0;
 		
