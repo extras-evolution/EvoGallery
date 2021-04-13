@@ -10,7 +10,7 @@ class Gallery
 	/**
 	* Class constructor, set configuration parameters
 	*/
-	function Gallery($params)
+	function __construct($params)
 	{
 		global $modx;
 
